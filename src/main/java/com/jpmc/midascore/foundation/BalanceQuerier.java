@@ -1,25 +1,22 @@
 package com.jpmc.midascore.foundation;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.jpmc.midascore.foundation.Balance;
+import com.jpmc.midascore.User;
+import com.jpmc.midascore.repository.UserRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 @Component
 public class BalanceQuerier {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final UserRepository userRepository;
+
+    public BalanceQuerier(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Balance query(Long userId) {
-        String username = switch (userId.intValue()) {
-            case 1 -> "alice";
-            case 2 -> "bob";
-            case 3 -> "wilbur";
-            case 4 -> "victor";
-            case 5 -> "wendy";
-            default -> throw new IllegalArgumentException("Unknown userId: " + userId);
-        };
-        String url = "http://localhost:33400/balance?user=" + username;
-        return restTemplate.getForObject(url, Balance.class);
+        return userRepository.findById(userId)
+                .map(user -> new Balance(user.getBalance()))
+                .orElse(new Balance(0.0F)); // default 0 if not found
     }
 }
