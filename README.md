@@ -1,47 +1,57 @@
-# Midas
-Project repo for the JPMC Advanced Software Engineering Forage program
-# 💰 Midas Core
+Midas Core - J.P. Morgan Software Engineering Forage Project
 
-Midas Core is a key component of the Midas platform, responsible for processing financial transactions and serving real-time user balances. Built using Spring Boot and Kafka, this service acts as the backbone of the system’s transaction pipeline and user state management.
+A backend microservice that processes financial transactions and exposes user account balances via a REST API, as part of the JPMorgan Chase Software Engineering Virtual Experience.
 
----
+📌 Overview
 
-## 🚀 Overview
+This project simulates a financial application ("Midas") core engine that handles user-to-user transactions. You have implemented a robust Spring Boot backend that consumes transactions, updates balances, and provides a REST endpoint for balance lookup.
 
-This microservice handles:
+This work was part of the J.P. Morgan Forage Software Engineering Program, designed to mimic real-world tasks performed by JPMorgan Chase engineers.
 
-- Ingestion of financial transactions via Apache Kafka
-- Real-time processing and balance updates for users
-- In-memory storage of user states
-- REST API exposure to retrieve current user balances
+✅ Tasks Completed
 
-The design is intentionally lightweight and modular, optimized for rapid development, ease of testing, and future scalability.
+Task 1: File Loader
 
----
+Implemented a service to load transaction files containing sender, receiver, and amount.
 
-## 🧩 Key Features
+Task 2: Kafka Integration
 
-### 1. Kafka-Based Transaction Ingestion
-- Consumes transactions from the `transactions` Kafka topic
-- Transaction format: `senderId, receiverId, amount`
-- Parses and validates each transaction for processing
+Configured a Kafka producer and consumer to asynchronously forward transactions.
 
-### 2. Transaction Processing Logic
-- Deducts balance from sender
-- Adds balance to receiver
-- Automatically creates new users if they do not exist
-- Ensures consistency in user state after each transaction
+Verified end-to-end message queue operations.
 
-### 3. User State Management
-- Uses an in-memory model (`User`, `UserRecord`) to maintain:
-  - Current balance
-  - List of sent and received transactions
+Task 3: Transaction Forwarding
 
-### 4. Transaction Forwarding
-- Valid transactions are forwarded using a custom forwarder class
-- Simulates integration with downstream services (e.g., incentives)
+Built a transaction forwarder to send transactions to a downstream processing service.
 
-### 5. REST API for Balance Retrieval
-- Exposes a REST endpoint:  
+Implemented error handling and retries.
 
+Task 4: Balance Updates
 
+Implemented a TransactionProcessorService to update user balances from transactions.
+
+Maintained a persistent in-memory map of user balances.
+
+Task 5: REST API for Balances
+
+Added a /balance?userId={} REST endpoint.
+
+Integrated the endpoint into the existing Spring Boot app (Midas Core).
+
+Returned user balances in JSON using the Balance class.
+
+Returned zero if user not found.
+
+🔧 Tech Stack
+
+Java 17
+
+Spring Boot 3.2
+
+Apache Kafka (Embedded for testing)
+
+JUnit 5 for testing
+
+Maven for build and dependency management
+
+H2 in-memory DB (for user data)
